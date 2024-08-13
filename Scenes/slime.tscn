@@ -1,0 +1,122 @@
+[gd_scene load_steps=15 format=3 uid="uid://bdjdfa8ex28eh"]
+
+[ext_resource type="Script" path="res://Scripts/slime.gd" id="1_0ixvq"]
+[ext_resource type="Texture2D" uid="uid://k32xn11oc0p1" path="res://Graphics/slime_purple.png" id="1_sexv6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r4s47"]
+atlas = ExtResource("1_sexv6")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pidt5"]
+atlas = ExtResource("1_sexv6")
+region = Rect2(0, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_71kb2"]
+atlas = ExtResource("1_sexv6")
+region = Rect2(24, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kv14u"]
+atlas = ExtResource("1_sexv6")
+region = Rect2(48, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3wj3s"]
+atlas = ExtResource("1_sexv6")
+region = Rect2(72, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_naqr0"]
+atlas = ExtResource("1_sexv6")
+region = Rect2(0, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3npsi"]
+atlas = ExtResource("1_sexv6")
+region = Rect2(72, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wfv1j"]
+atlas = ExtResource("1_sexv6")
+region = Rect2(24, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_spdhq"]
+atlas = ExtResource("1_sexv6")
+region = Rect2(48, 48, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ye2kx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r4s47")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pidt5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_71kb2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kv14u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3wj3s")
+}],
+"loop": true,
+"name": &"active",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_naqr0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3npsi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wfv1j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_spdhq")
+}],
+"loop": false,
+"name": &"death",
+"speed": 4.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jp5ao"]
+size = Vector2(12, 11)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lcec0"]
+size = Vector2(14, 14)
+
+[node name="Slime" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_0ixvq")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -12)
+sprite_frames = SubResource("SpriteFrames_ye2kx")
+animation = &"death"
+autoplay = "active"
+frame = 3
+frame_progress = 1.0
+
+[node name="Hitbox" type="Area2D" parent="."]
+position = Vector2(0, -7)
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("RectangleShape2D_jp5ao")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_lcec0")
+debug_color = Color(1.15514e-06, 0.591519, 0.380147, 0.42)
+
+[node name="PatrolTimer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
+[node name="DeathTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="PatrolTimer" to="." method="_on_patrol_timer_timeout"]
+[connection signal="timeout" from="DeathTimer" to="." method="_on_death_timer_timeout"]

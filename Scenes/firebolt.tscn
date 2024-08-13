@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://dyas3djealduj"]
+
+[ext_resource type="Script" path="res://Scripts/firebolt.gd" id="1_jueks"]
+[ext_resource type="Texture2D" uid="uid://boscfi05k1q8q" path="res://Graphics/FB004.png" id="1_kshfj"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_watj3"]
+radius = 4.0
+height = 16.0
+
+[node name="Firebolt" type="Area2D"]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_jueks")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -3)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("1_kshfj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, -3)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_watj3")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 4.0
+one_shot = true
+autostart = true
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
