@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bdjdfa8ex28eh"]
+[gd_scene load_steps=13 format=3 uid="uid://bdjdfa8ex28eh"]
 
 [ext_resource type="Script" path="res://Scripts/slime.gd" id="1_0ixvq"]
 [ext_resource type="Texture2D" uid="uid://k32xn11oc0p1" path="res://Graphics/slime_purple.png" id="1_sexv6"]
@@ -20,14 +20,6 @@ atlas = ExtResource("1_sexv6")
 region = Rect2(48, 24, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3wj3s"]
-atlas = ExtResource("1_sexv6")
-region = Rect2(72, 24, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_naqr0"]
-atlas = ExtResource("1_sexv6")
-region = Rect2(0, 48, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_3npsi"]
 atlas = ExtResource("1_sexv6")
 region = Rect2(72, 24, 24, 24)
 
@@ -63,12 +55,6 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_naqr0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3npsi")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_wfv1j")
 }, {
 "duration": 1.0,
@@ -95,7 +81,7 @@ position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_ye2kx")
 animation = &"death"
 autoplay = "active"
-frame = 3
+frame = 1
 frame_progress = 1.0
 
 [node name="Hitbox" type="Area2D" parent="."]
@@ -116,6 +102,7 @@ wait_time = 2.0
 autostart = true
 
 [node name="DeathTimer" type="Timer" parent="."]
+wait_time = 0.5
 one_shot = true
 
 [connection signal="timeout" from="PatrolTimer" to="." method="_on_patrol_timer_timeout"]

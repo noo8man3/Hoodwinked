@@ -6,6 +6,8 @@ var firebolt = preload("res://Scenes/firebolt.tscn")
 @onready var attack_timer = $AttackTimer
 @onready var cast_marker : Marker2D = $CastPoint
 @onready var respawn_timer = $RespawnTimer
+@onready var hit_flash_player = $HitFlashPlayer
+
 
 const GRAVITY := 980
 const SPEED := 250
@@ -17,6 +19,7 @@ var current_state : State
 
 var cast_point : float
 var can_attack : bool = true
+var is_jumping : bool
 var is_attacking : bool
 var is_dying : bool
 var attack_timer_triggered : bool
@@ -41,7 +44,7 @@ func _physics_process(delta):
 	
 	move_and_slide()
 	set_player_anims()
-	debug_print_state()
+	#debug_print_state()
 
 
 func debug_print_state():
@@ -54,8 +57,9 @@ func player_falling(delta):
 
 
 func player_idle(delta):
-	if is_on_floor():
+	if is_on_floor() and !is_dying:
 		current_state = State.Idle
+		is_jumping = false
 
 
 func player_run(delta):
@@ -72,9 +76,10 @@ func player_run(delta):
 
 
 func player_jump(delta):
-	if Input.is_action_just_pressed("jump"):
+	if Input.is_action_just_pressed("jump") and !is_jumping:
 		velocity.y = JUMP_HEIGHT
 		current_state = State.Jump
+		is_jumping = true
 		
 	if !is_on_floor() and current_state == State.Jump:
 		var direction = get_direction()
@@ -148,8 +153,25 @@ func _on_attack_timer_timeout():
 
 
 func _on_hitbox_body_entered(body):
+	print(body.to_string())
+	
 	if body.is_in_group("Enemy"):
 		HealthManager.decrease_health(body.damage_amount)
+		hit_flash_player.play("hit_flash")
+	elif body.is_in_group("Trap"):
+		HealthManager.decrease_health(body.damage_amount)
+		hit_flash_player.play("hit_flash")
+
+
+func _on_hitbox_area_entered(area):
+	print(area.to_string())
+	print(area.name)
+	
+	if area.is_in_group("Abyss"):
+		HealthManager.decrease_health(3)
+	elif area.name == "hexbolt":
+		HealthManager.decrease_health(1)
+		hit_flash_player.play("hit_flash")
 
 
 func _on_respawn_timer_timeout():

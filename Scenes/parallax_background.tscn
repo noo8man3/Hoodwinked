@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=3 uid="uid://bqhf513to5rof"]
+
+[ext_resource type="Texture2D" uid="uid://bm1v27upjumjv" path="res://Graphics/night_sky_1.png" id="1_qa17o"]
+[ext_resource type="Texture2D" uid="uid://c7jl5m5kvo34f" path="res://Graphics/night_sky_2.png" id="2_jjq8d"]
+[ext_resource type="Texture2D" uid="uid://dt1r7tjmvwhkp" path="res://Graphics/night_sky_3.png" id="3_wmtg8"]
+[ext_resource type="Texture2D" uid="uid://cteid6gujyfrp" path="res://Graphics/night_sky_4.png" id="4_3ncc8"]
+
+[node name="ParallaxBackground" type="ParallaxBackground"]
+offset = Vector2(92, -49)
+transform = Transform2D(1, 0, 0, 1, 92, -49)
+
+[node name="BGParallax" type="ParallaxLayer" parent="."]
+motion_mirroring = Vector2(576, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="BGParallax"]
+texture = ExtResource("1_qa17o")
+
+[node name="Sprite2D2" type="Sprite2D" parent="BGParallax"]
+position = Vector2(576, 0)
+texture = ExtResource("1_qa17o")
+
+[node name="MoonLayer" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.9, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="MoonLayer"]
+position = Vector2(576, -90)
+texture = ExtResource("2_jjq8d")
+
+[node name="LightCloudsParallax" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.8, 1)
+motion_mirroring = Vector2(576, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="LightCloudsParallax"]
+texture = ExtResource("3_wmtg8")
+
+[node name="Sprite2D2" type="Sprite2D" parent="LightCloudsParallax"]
+texture = ExtResource("3_wmtg8")
+offset = Vector2(576, 0)
+
+[node name="DarkCloudsParallax" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.7, 1)
+motion_mirroring = Vector2(576, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="DarkCloudsParallax"]
+texture = ExtResource("4_3ncc8")
+
+[node name="Sprite2D2" type="Sprite2D" parent="DarkCloudsParallax"]
+texture = ExtResource("4_3ncc8")
+offset = Vector2(576, 0)

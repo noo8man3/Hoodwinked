@@ -1,0 +1,131 @@
+[gd_scene load_steps=17 format=3 uid="uid://r4n7fqo1dvgo"]
+
+[ext_resource type="Script" path="res://Scripts/cultist.gd" id="1_8i8ae"]
+[ext_resource type="Texture2D" uid="uid://qt8orrvnuql3" path="res://Graphics/cultist_walking.png" id="1_oiwl2"]
+[ext_resource type="Texture2D" uid="uid://bssob6declxmd" path="res://Graphics/cultist_dying.png" id="2_tjmh3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p5oq7"]
+atlas = ExtResource("2_tjmh3")
+region = Rect2(0, 0, 28, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uu8q7"]
+atlas = ExtResource("2_tjmh3")
+region = Rect2(0, 24, 28, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7dfap"]
+atlas = ExtResource("2_tjmh3")
+region = Rect2(0, 48, 28, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l4dgt"]
+atlas = ExtResource("2_tjmh3")
+region = Rect2(0, 72, 28, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mclm8"]
+atlas = ExtResource("2_tjmh3")
+region = Rect2(0, 96, 28, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yirhs"]
+atlas = ExtResource("1_oiwl2")
+region = Rect2(0, 0, 20, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5fkcp"]
+atlas = ExtResource("1_oiwl2")
+region = Rect2(0, 24, 20, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jwcg0"]
+atlas = ExtResource("1_oiwl2")
+region = Rect2(0, 48, 20, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bheol"]
+atlas = ExtResource("1_oiwl2")
+region = Rect2(0, 72, 20, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p85wv"]
+atlas = ExtResource("1_oiwl2")
+region = Rect2(0, 96, 20, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u3g03"]
+atlas = ExtResource("1_oiwl2")
+region = Rect2(0, 120, 20, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ll4x2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p5oq7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uu8q7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7dfap")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l4dgt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mclm8")
+}],
+"loop": false,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yirhs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5fkcp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jwcg0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bheol")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p85wv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u3g03")
+}],
+"loop": true,
+"name": &"walking",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1ueh2"]
+radius = 7.0
+height = 20.0
+
+[node name="Cultist" type="CharacterBody2D"]
+script = ExtResource("1_8i8ae")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(1, -12)
+sprite_frames = SubResource("SpriteFrames_ll4x2")
+animation = &"death"
+autoplay = "walking"
+frame = 4
+frame_progress = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -10)
+shape = SubResource("CapsuleShape2D_1ueh2")
+
+[node name="CastPoint" type="Marker2D" parent="."]
+position = Vector2(0, -10)
+
+[node name="CastTimer" type="Timer" parent="."]
+wait_time = 3.0
+autostart = true
+
+[node name="PatrolTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="DeathTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="CastTimer" to="." method="_on_cast_timer_timeout"]
+[connection signal="timeout" from="PatrolTimer" to="." method="_on_patrol_timer_timeout"]
+[connection signal="timeout" from="DeathTimer" to="." method="_on_death_timer_timeout"]

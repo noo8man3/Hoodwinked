@@ -1,11 +1,15 @@
 extends CharacterBody2D
 
+var hexbolt = preload("res://Scenes/hexbolt.tscn")
+
 @export var patrol_points : Node
 @export var speed = 2500
 @export var wait_time = 2
 @export var damage_amount : int = 1
 
+@onready var cast_point = $CastPoint
 @onready var sprite = $AnimatedSprite2D
+@onready var cast_timer = $CastTimer
 @onready var patrol_timer = $PatrolTimer
 @onready var death_timer = $DeathTimer
 
@@ -14,10 +18,10 @@ const GRAVITY := 980
 enum State { Active }
 
 var current_state : State
-var direction : Vector2 = Vector2.LEFT
 var num_points : int
 var point_positions : Array[Vector2]
 var current_point : Vector2
+var direction : Vector2 = Vector2.RIGHT
 var current_point_position : int
 var can_walk : bool
 var is_dying : bool
@@ -61,15 +65,14 @@ func enemy_active(delta):
 	
 		current_point = point_positions[current_point_position]
 	
-		if current_point.x > position.x:
-			direction = Vector2.RIGHT
-		else:
+		if current_point.x < position.x:
 			direction = Vector2.LEFT
+		else:
+			direction = Vector2.RIGHT
 	
 		can_walk = false
 		patrol_timer.start()
-	
-	sprite.flip_h = direction.x < 0
+
 
 func enemy_dying(delta):
 	if !is_dying:
@@ -80,8 +83,17 @@ func enemy_dying(delta):
 		death_timer.start()
 		is_dying = false
 
-func _on_patrol_timer_timeout():
-	can_walk = true
 
 func _on_death_timer_timeout():
 	self.queue_free()
+
+
+func _on_patrol_timer_timeout():
+	can_walk = true
+
+
+func _on_cast_timer_timeout():
+	var hexbolt_instance = hexbolt.instantiate()
+	hexbolt_instance.global_position = cast_point.global_position
+	hexbolt_instance.name = "hexbolt"
+	get_parent().add_child(hexbolt_instance)
